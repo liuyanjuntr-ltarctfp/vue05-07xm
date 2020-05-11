@@ -1,100 +1,171 @@
 <template>
-    <div>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="活动名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域" prop="region">
-    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="活动时间" required>
-    <el-col :span="11">
-      <el-form-item prop="date1">
-        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-      </el-form-item>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-form-item prop="date2">
-        <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-      </el-form-item>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="即时配送" prop="delivery">
-    <el-switch v-model="ruleForm.delivery"></el-switch>
-  </el-form-item>
-  <el-form-item label="活动性质" prop="type">
-    <el-checkbox-group v-model="ruleForm.type">
-      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-      <el-checkbox label="地推活动" name="type"></el-checkbox>
-      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-    </el-checkbox-group>
-  </el-form-item>
-  <el-form-item label="特殊资源" prop="resource">
-    <el-radio-group v-model="ruleForm.resource">
-      <el-radio label="线上品牌商赞助"></el-radio>
-      <el-radio label="线下场地免费"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="活动形式" prop="desc">
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-    <el-button @click="resetForm('ruleForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+  <div class="bg">
+    <div class="box">
+      <h1>注册账号</h1>
+      <el-form
+        :model="ruleForm"
+        ref="ruleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" placeholder="请输入正确的邮箱"></el-input>
+        </el-form-item>
+        <div style="margin-top: 15px;">
+          <el-form-item label="验证码" prop="yzm">
+            <el-input placeholder="请输入验证码" v-model="ruleForm.yzm">
+              <template slot="append"><el-button @click="getyzm">获取验证码</el-button> </template>
+            </el-input>
+          </el-form-item>
+        </div>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input
+            type="password"
+            v-model="ruleForm.checkPass"
+            autocomplete="off"
+            placeholder="请再次确认密码"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" class="zc" @click="submitForm('ruleForm' )">立即注册</el-button>
+        </el-form-item>
+      </el-form>
     </div>
+  </div>
 </template>
 <script>
+
+
 export default {
      data() {
-      return {
-        ruleForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
-          ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-          ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-          ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
-          ]
+       var validateEmail = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请正确填写邮箱'));
+        } else {
+          if (value !== '') { 
+            var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入有效的邮箱'));
+            }
+          }
+          callback();
         }
       };
+         var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm.checkPass !== '') {
+            this.$refs.ruleForm.validateField('checkPass');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.ruleForm.pass) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+      
+
+
+      return {
+         numberValidateForm: {
+          number: '',
+        creationTime:"creationTime"
+        },
+        
+
+         dynamicValidateForm: {
+          domains: [{
+            value: ''
+          }],
+         
+        },
+        ruleForm: {
+          email:'',
+          yzm:'',
+          username:'',
+          password:'',
+        },
+        // rules: {
+        //   number:[
+        //       { required: true, message: '请输入正确的验证码', trigger: 'blur' }
+        //   ],
+        //   name: [
+        //     { required: true, message: '请输入正确的用户名', trigger: 'blur' },
+        //     { min: 3, max: 5, message: '长度在 3个到5个字符', trigger: 'blur' }
+            
+        //   ],
+        //   pass: [
+        //     { validator: validatePass, trigger: 'blur' },
+        //     { min: 3, max: 5, message: '长度在 16个字符，只能输入字母和数字', trigger: 'blur' }
+            
+        //   ],
+        //   checkPass: [
+        //     { validator: validatePass2, trigger: 'blur' },
+        //     { min: 3, max: 5, message: '长度在 16个字符，只能输入字母和数字', trigger: 'blur' }
+        //   ],  
+        //     email: [
+        //  { required: true, message: '邮箱不能为空' },
+        //   { pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: "请输入正确的邮箱", trigger: "blur"}
+        // ],
+        }
+      // };
+    },
+    created(){
+      //  this.getyam();
     },
     methods: {
+      getyzm(){
+        this.$axios.post('/kz/verification/code',{user_email:this.ruleForm.email}).then(res =>{
+          console.log(res);
+          // console.log(user_email);
+        })
+        //  this.$axios.post('/wb/sendEmail',{email:this.ruleForm.email}).then(res =>{
+        //   console.log(res);
+        // })
+       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
+          // this.$axios.post('/wb/register',{
+          //   email:this.ruleForm.email,
+          //   code:this.ruleForm.yzm,
+          //   username:this.ruleForm.username,
+          //   password:this.ruleForm.password,
+          //   }).then(res =>{
+          //   console.log(res);
+          //   if(res.data.code===200){
+          //     // this.$router.push('/deng')
+          //   }
+          // })
+            this.axios.post('/kz/register',{
+              // user_name: this.ruleForm.name,
+              user_email:this.ruleForm.email,
+
+            }).then(res => {
+              console.log(res);
+              if(res.data.code===200){
+          this.$router.push('/deng')
+          }
+            })
+
+
+
+
           } else {
             console.log('error submit!!');
             return false;
@@ -107,6 +178,42 @@ export default {
     }
 }
 </script>
-<style lang="">
-    
+<style>
+.bg {
+  width: 100%;
+  height: 600px;
+  background-size: 100% 100%;
+  background-image: url(../../assets/chongzhi.jpg);
+  overflow: hidden;
+}
+.box {
+  width: 500px;
+  height: 500px;
+  background: #ccc;
+  margin: 40px auto;
+  opacity: 0.9;
+}
+.box h1 {
+  font-size: 30px;
+  color: black;
+  font-weight: 100;
+  text-align: center;
+  line-height: 80px;
+}
+.demo-ruleForm {
+  margin: 20px auto;
+  width: 400px;
+}
+.qy {
+  width: 400px;
+  margin: auto;
+}
+.username {
+  width: 300px;
+  margin: auto;
+}
+.zc {
+  width: 300px;
+  margin: auto;
+}
 </style>
