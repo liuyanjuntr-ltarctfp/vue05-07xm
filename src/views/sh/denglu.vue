@@ -18,7 +18,7 @@
               <label style="float: right; margin-top: 10px; font-size: 12px">
                 <a href="#" style=" text-decoration: none; color: #258FE6">忘记密码？</a>
               </label>
-              <el-button v-model="form" type="primary" class="dl" @click="denglu()">登  录</el-button>
+              <el-button type="primary" class="dl" @click="dengLu()">登  录</el-button>
               <el-checkbox v-model="checked" style="color: black">点击登录表示你已阅读并且同意该协议</el-checkbox>
          </div>
        </div>
@@ -92,9 +92,9 @@ export default {
     }
   },
   methods:{
-     denglu(){
+     dengLu(){
          var formdata=new FormData()
-         this.axios.post('/api/login',{
+         this.$axios.post('/api/login',{
             email: this.input1,
             password: this.input2,
          }).then(res=>{
@@ -102,7 +102,7 @@ export default {
              var codes=res.data.code
              if(codes===200){
                 this.$message({
-                message: '登陆成功',
+                message: '登录成功',
                 type: 'success'
                 });
              }else{
