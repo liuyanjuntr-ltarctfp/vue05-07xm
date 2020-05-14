@@ -153,13 +153,17 @@ export default {
           //   }
           // })
             this.axios.post('/kz/register',{
-              // user_name: this.ruleForm.name,
+             user_name: this.ruleForm.name,
               user_email:this.ruleForm.email,
+              // "user_avatar": this.ruleForm.avatar,
+              user_password: this.ruleForm.password,
+              // "user_role": this.ruleForm.role,
+              verificationCode: this.ruleForm.yzm
 
             }).then(res => {
               console.log(res);
               if(res.data.code===200){
-          this.$router.push('/deng')
+          this.$router.push('/denglu') 
           }
             })
 
